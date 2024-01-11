@@ -62,6 +62,12 @@
 
 //todo ----------------------------------------------------------------------------- \\
 
+//*  Recupero gli elementi dal DOM
+const rangeSelect = document.getElementById('range-select');
+const confirmButton = document.getElementById('confirm-button');
+const gridElement = document.querySelector('section .grid');
+const gamePoints = document.getElementById('game-points');
+
 //? --------------------- FUNZIONI --------------------- \\
 // Funzione per creare una cella
 const makeCell = (content) => {
@@ -90,15 +96,13 @@ const makeCell = (content) => {
     return cell;
 }
 
-//*  Recupero gli elementi dal DOM
-const rangeSelect = document.getElementById('range-select');
-const confirmButton = document.getElementById('confirm-button');
-const gridElement = document.querySelector('section .grid');
-const gamePoints = document.getElementById('game-points');
-
 //* Variabili utili
 // Variabile somma per conteggiare il punteggio
-let sum = 0;
+let rows;
+let cols;
+let totalCells;
+let pointSum = 0;
+let allBombs = 16;
 
 //* L'utente clicca su un bottone che genererà una griglia di gioco quadrata.
 confirmButton.addEventListener('click', function () {
@@ -109,9 +113,9 @@ confirmButton.addEventListener('click', function () {
     })
 
     // Informazioni note
-    let rows = rangeSelect.value;
-    let cols = rangeSelect.value;
-    const totalCells = rows * cols;
+    rows = rangeSelect.value;
+    cols = rangeSelect.value;
+    totalCells = rows * cols;
 
     // Ripulisco la pagina per poter stampare
     gridElement.innerHTML = '';
@@ -138,18 +142,16 @@ confirmButton.addEventListener('click', function () {
                 // Switch colore
                 cell.classList.add('clicked');
 
-                // Stampo numero in console
-                console.log(parseInt(cell.innerText));
-
-                // Conteggio punti
-                let points = 0;
-                sum += ++points;
-                console.log('Somma: ', sum);
-
                 if (cell.classList.contains('clicked')) {
                     cell.classList.add('disabled');
                     cell.disabled = true;
                 }
+                // Stampo numero in console
+                console.log(parseInt(cell.innerText));
+
+                // Conto i punti, li sommo e stampo in pagina il risultato 
+                gamePoints.innerText = ++pointSum;
+                console.log('Somma: ', pointSum);
 
             })
         }
