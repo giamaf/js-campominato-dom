@@ -86,6 +86,10 @@ main section {
     opacity: 0.5;
 }
 
+.red {
+    background-color: red;
+}
+
 /*? Footer */
 footer {
     height: 70px;
