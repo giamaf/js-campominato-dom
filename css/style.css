@@ -15,6 +15,7 @@
 /** Generics */
 .navbar,
 .header-left,
+.header-center,
 .form,
 .footer {
     display: flex;
@@ -28,6 +29,10 @@ img {
 
 a {
     color: black;
+}
+
+p {
+    margin: 0px;
 }
 
 /*! Header */
@@ -74,6 +79,11 @@ main section {
 
 .clicked {
     background-color: lightskyblue;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 /*? Footer */
