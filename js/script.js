@@ -1,6 +1,6 @@
-console.log('JS OK');
-
 //! Griglia Dinamica
+
+//! ---------------------- PARTE 1 ---------------------- \\
 // L'utente clicca su un bottone che genererà una griglia di gioco quadrata.
 // Ogni cella ha un numero progressivo, da 1 a 100.
 // Ci saranno quindi 10 caselle per ognuna delle 10 righe.
@@ -28,11 +28,43 @@ console.log('JS OK');
 // - questo bonus richiederà un evento diverso dal 'click'
 // - questo bonus richiederà una riflessione extra per quel che riguarda il calcolo della larghezza delle celle;)
 
+//! ---------------------- PARTE 2 ---------------------- \\
+// Il computer deve generare 16 numeri casuali nello stesso range della difficoltà prescelta: le bombe.
+// Attenzione: nella stessa cella può essere posizionata al massimo una bomba, perciò nell’array delle bombe non potranno esserci due numeri uguali.
+// In seguito l'utente clicca su una cella: 
+// - se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina.
+// - in alternativa la cella cliccata si colora di azzurro e l'utente può continuare a cliccare sulle altre celle.
+// La partita termina quando il giocatore clicca su una bomba o quando raggiunge il numero massimo possibile di numeri consentiti(ovvero quando ha rivelato tutte le celle che non sono bombe).
+// Al termine della partita il software deve comunicare il punteggio, cioè il numero di volte che l’utente ha cliccato su una cella che non era una bomba.
+
+//todo #MILESTONE 1
+// Prepariamo "qualcosa" per tenere il punteggio dell'utente.
+// Quando l'utente clicca su una cella, incrementiamo il punteggio.
+// Se riusciamo, facciamo anche in modo da non poter più cliccare la stessa cella.
+
+//todo #MILESTONE 2
+// Facciamo in modo di generare 16 numeri casuali(tutti diversi) compresi tra 1 e il massimo di caselle disponibili.
+// Generiamoli e stampiamo in console per essere certi che siano corretti
+
+//todo # MILESTONE 3
+// Quando l'utente clicca su una cella, verifichiamo se ha calpestato una bomba, controllando se il numero di cella è presente nell'array di bombe.Se si, la cella diventa rossa(raccogliamo il punteggio e scriviamo in console che la partita termina) altrimenti diventa azzurra e dobbiamo incrementare il punteggio.
+
+//todo # MILESTONE 4
+// Quando l'utente clicca su una cella, e questa non è una bomba, dobbiamo controllare se il punteggio incrementato ha raggiunto il punteggio massimo perchè in quel caso la partita termina.
+// Raccogliamo quindi il messaggio e scriviamo un messaggio appropriato.
+// (Ma come stabiliamo quale sia il punteggio massimo ?)
+
+//todo # MILESTONE 5
+// Quando la partita termina dobbiamo capire se è terminata perchè è stata cliccata una bomba o se perchè l'utente ha raggiunto il punteggio massimo. Dobbiamo poi stampare in pagina il punteggio raggiunto ed il messaggio adeguato in caso di vittoria o sconfitta.
+
+//todo SUPER BONUS
+// Quando l'utente clicca una bomba, scopriamo tutte le caselle del tabellone, colorando di rosso tutte le bombe
+
 //todo ----------------------------------------------------------------------------- \\
 
 //? --------------------- FUNZIONI --------------------- \\
 // Funzione per creare una cella
-const makeCell = (number) => {
+const makeCell = (content) => {
     // Creo la cella
     let cell = document.createElement('div');
 
@@ -48,8 +80,11 @@ const makeCell = (number) => {
         cell.classList.add('small');
     }
 
-    //Aggiungo un parametro numero da stampare nella cella
-    cell.innerText = number;
+    //Aggiungo qualcosa da stampare nella cella
+    cell.innerText = content;
+
+    // Stampo la cella in pagina
+    gridElement.appendChild(cell);
 
     // Specifico cosa restituire
     return cell;
@@ -59,6 +94,11 @@ const makeCell = (number) => {
 const rangeSelect = document.getElementById('range-select');
 const confirmButton = document.getElementById('confirm-button');
 const gridElement = document.querySelector('section .grid');
+const gamePoints = document.getElementById('game-points');
+
+//* Variabili utili
+// Variabile somma per conteggiare il punteggio
+let sum = 0;
 
 //* L'utente clicca su un bottone che genererà una griglia di gioco quadrata.
 confirmButton.addEventListener('click', function () {
@@ -91,18 +131,25 @@ confirmButton.addEventListener('click', function () {
             // inserendo come argomento la i per stampare il numero durante il loop
             const cell = makeCell(i);
 
-            // Stampo la cella in pagina
-            gridElement.appendChild(cell);
-
             // Al click sulla cella, stampiamo il numero della cella cliccata in console, 
             // poi coloriamo la cella d'azzurro!
             cell.addEventListener('click', function () {
 
-                // Stampo numero in console
-                console.log(i);
-
                 // Switch colore
                 cell.classList.add('clicked');
+
+                // Stampo numero in console
+                console.log(parseInt(cell.innerText));
+
+                // Conteggio punti
+                let points = 0;
+                sum += ++points;
+                console.log('Somma: ', sum);
+
+                if (cell.classList.contains('clicked')) {
+                    cell.classList.add('disabled');
+                    cell.disabled = true;
+                }
 
             })
         }
