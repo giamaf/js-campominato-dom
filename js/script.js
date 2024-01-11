@@ -47,7 +47,8 @@
 // Generiamoli e stampiamo in console per essere certi che siano corretti
 
 //todo # MILESTONE 3
-// Quando l'utente clicca su una cella, verifichiamo se ha calpestato una bomba, controllando se il numero di cella è presente nell'array di bombe.Se si, la cella diventa rossa(raccogliamo il punteggio e scriviamo in console che la partita termina) altrimenti diventa azzurra e dobbiamo incrementare il punteggio.
+// Quando l'utente clicca su una cella, verifichiamo se ha calpestato una bomba, controllando se il numero di cella è presente nell'array di bombe.
+// Se si, la cella diventa rossa(raccogliamo il punteggio e scriviamo in console che la partita termina) altrimenti diventa azzurra e dobbiamo incrementare il punteggio.
 
 //todo # MILESTONE 4
 // Quando l'utente clicca su una cella, e questa non è una bomba, dobbiamo controllare se il punteggio incrementato ha raggiunto il punteggio massimo perchè in quel caso la partita termina.
@@ -60,7 +61,7 @@
 //todo SUPER BONUS
 // Quando l'utente clicca una bomba, scopriamo tutte le caselle del tabellone, colorando di rosso tutte le bombe
 
-//todo ----------------------------------------------------------------------------- \\
+//todo ------------------------------------------------------------------------------- \\
 
 //*  Recupero gli elementi dal DOM
 const rangeSelect = document.getElementById('range-select');
@@ -68,17 +69,23 @@ const confirmButton = document.getElementById('confirm-button');
 const gridElement = document.querySelector('section .grid');
 const gamePoints = document.getElementById('game-points');
 
-//? --------------------- FUNZIONI --------------------- \\
+//? ---------------------------------------------------------------------------------- \\ 
+//? FUNZIONI 
+//? ---------------------------------------------------------------------------------- \\ 
+
 // Funzione per creare una cella
 const makeCell = (content) => {
     // Creo la cella
-    let cell = document.createElement('div');
+    const cell = document.createElement('div');
 
     // Aggiungo la classe cell
-    cell.className = 'cell';
+    cell.classList.add('cell');
 
     // Aggiungo il numero di righe e colonne in base alla selezione dell'utente
-    if (rangeSelect.value == 10) {
+    if (rangeSelect.value == 0) {
+        return;
+    }
+    else if (rangeSelect.value == 10) {
         cell.classList.add('big');
     } else if (rangeSelect.value == 9) {
         cell.classList.add('medium');
@@ -96,15 +103,38 @@ const makeCell = (content) => {
     return cell;
 }
 
-//* Variabili utili
+// Funzione per creare le diverse bombe
+const makeBombs = (allBombs, maxCells) => {
+    const arrayBombs = [];
+    while (arrayBombs.length < allBombs) {
+        const randomNumber = Math.floor(Math.random() * maxCells) + 1;
+        if (!arrayBombs.includes(randomNumber)) {
+            arrayBombs.push(randomNumber)
+        }
+    }
+    return arrayBombs;
+}
+
+//? ---------------------------------------------------------------------------------- \\ 
+//? VARIABILI
+//? ---------------------------------------------------------------------------------- \\ 
+
 // Variabile somma per conteggiare il punteggio
 let rows;
 let cols;
 let totalCells;
-let pointSum = 0;
+
+// Numero massimo di bombe
 let allBombs = 16;
 
-//* L'utente clicca su un bottone che genererà una griglia di gioco quadrata.
+// Punteggio massimo = celle totali - bombe totali
+const maxPoints = totalCells - allBombs;
+
+//todo ------------------------------------------------------------------------------- \\
+//todo EVENTI DINAMICI
+//todo ------------------------------------------------------------------------------- \\
+
+// L'utente clicca sul bottone che genererà una griglia di gioco quadrata.
 confirmButton.addEventListener('click', function () {
 
     //! Blocco il comportamento di default
@@ -112,50 +142,62 @@ confirmButton.addEventListener('click', function () {
         e.preventDefault();
     })
 
+    //Cambio il testo nel button
+    confirmButton.innerHTML = 'Riprova';
+
+    // Ripulisco la pagina per poter stampare
+    gridElement.innerHTML = '';
+
+    // Porto a 0 la somma e stampo il risultato
+    let pointSum = 0;
+    gamePoints.innerText = pointSum;
+
     // Informazioni note
     rows = rangeSelect.value;
     cols = rangeSelect.value;
     totalCells = rows * cols;
 
-    // Ripulisco la pagina per poter stampare
-    gridElement.innerHTML = '';
+    // Genero una griglia di gioco con 10 righe e 10 colonne
+    for (let i = 1; i <= totalCells; i++) {
 
-    //! Validazione
-    if (rangeSelect.value == 0) {
-        rangeSelect.classList.add('is-invalid');
-        return;
-    } else {
-        rangeSelect.classList.remove('is-invalid');
-        rangeSelect.classList.add('is-valid');
+        // Passo la funzione 'crea cella' in una variabile per utilizzarla nel ciclo
+        // inserendo come argomento la i per stampare il numero durante il loop
+        const cell = makeCell(i);
 
-        //* Genero una griglia di gioco con 10 righe e 10 colonne
-        for (let i = 1; i <= totalCells; i++) {
+        // Al click sulla cella, stampiamo il numero della cella cliccata in console, 
+        // poi coloriamo la cella d'azzurro!
+        cell.addEventListener('click', function () {
 
-            // Passo la funzione 'crea cella' in una variabile per utilizzarla nel ciclo
-            // inserendo come argomento la i per stampare il numero durante il loop
-            const cell = makeCell(i);
+            // Switch colore
+            cell.classList.add('clicked');
 
-            // Al click sulla cella, stampiamo il numero della cella cliccata in console, 
-            // poi coloriamo la cella d'azzurro!
-            cell.addEventListener('click', function () {
+            if (cell.classList.contains('clicked')) {
+                cell.classList.add('disabled');
+                cell.disabled = true;
+            }
 
-                // Switch colore
-                cell.classList.add('clicked');
+            // Stampo numero in console
+            console.log(parseInt(cell.innerText));
 
-                if (cell.classList.contains('clicked')) {
-                    cell.classList.add('disabled');
-                    cell.disabled = true;
-                }
-                // Stampo numero in console
-                console.log(parseInt(cell.innerText));
+            // Controllo se ho cliccato una bomba
+            const isExploded = bombs.includes(parseInt(cell.innerText));
 
+            if (isExploded) {
+                cell.classList.add('red');
+                console.log('Hai perso, il tuo punteggio è:', pointSum);
+            }
+            else {
                 // Conto i punti, li sommo e stampo in pagina il risultato 
                 gamePoints.innerText = ++pointSum;
                 console.log('Somma: ', pointSum);
-
-            })
-        }
+            }
+        })
     }
+
+    // Creo le bombe
+    const bombs = makeBombs(allBombs, totalCells);
+    console.log(bombs);
+
 })
 
 
