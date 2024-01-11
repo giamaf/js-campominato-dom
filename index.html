@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="" type="">
+    <meta name="description" content="">
+    <meta name="copyright" content="HTML.it">
+    <meta name="author" content="Gianluca Maffucci">
+    <title>Griglia Dinamica</title>
+
+    <!-- JavaScript -->
+    <script defer src="js/script.js"></script>
+
+    <!-- Bootstrap 5 -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Fontawesome -->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.css'
+        integrity='sha512-tx5+1LWHez1QiaXlAyDwzdBTfDjX07GMapQoFTS74wkcPMsI3So0KYmFe6EHZjI8+eSG0ljBlAQc3PQ5BTaZtQ=='
+        crossorigin='anonymous' />
+
+    <link rel="stylesheet" href="css/style.css">
+
+
+</head>
+
+<body>
+
+    <!--! Header -->
+    <header>
+        <nav class="navbar container-fluid p-3">
+            <nav class="header-left gap-4">
+                <img src="img/Logo boolean.png" alt="">
+                <h2 class="m-0">Campo Minato</h2>
+            </nav>
+            <nav class="header-right">
+                <div class="col-auto">
+                    <form class="form gap-2">
+                        <label for="range-select" class="col-form-label">Grandezza:</label>
+                        <select class="form-select form-select-sm" id="range-select" aria-label="Small select example">
+                            <option value="0" selected>-- Seleziona la grandezza --</option>
+                            <option value="7">Piccola</option>
+                            <option value="9">Media</option>
+                            <option value="10">Grande</option>
+                        </select>
+                        <button type="button" id="confirm-button" class="btn btn-outline-dark btn-sm">Conferma</button>
+                    </form>
+                </div>
+            </nav>
+        </nav>
+    </header>
+
+    <!--todo Main -->
+    <main>
+        <section class="my-container d-flex justify-content-center p-5">
+            <div class="grid"></div>
+        </section>
+    </main>
+
+    <!--? Footer -->
+    <footer class="footer container-fluid p-3">
+        <h6 class="m-0">Made with &hearts; by <a href="#">Gianluca</a></h6>
+    </footer>
+</body>
+
+</html>

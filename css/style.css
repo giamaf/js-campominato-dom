@@ -1,0 +1,82 @@
+/* CSS Reset */
+/* * {
+    Margin: 0;
+    Padding: 0;
+    Box-sizing: border-box;
+} */
+
+/** Utils */
+.my-container {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+/** Generics */
+.navbar,
+.header-left,
+.form,
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+img {
+    max-width: 100%;
+}
+
+a {
+    color: black;
+}
+
+/*! Header */
+header {
+    height: 80px;
+}
+
+/*todo Main */
+main {
+    background-color: aquamarine;
+}
+
+main section {
+    height: calc(100vh - 150px);
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+}
+
+.grid .cell {
+    border: 1px solid black;
+    cursor: pointer;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.big {
+    width: calc(100% / 10);
+}
+
+.medium {
+    width: calc(100% / 9);
+}
+
+.small {
+    width: calc(100% / 7);
+}
+
+.clicked {
+    background-color: lightskyblue;
+}
+
+/*? Footer */
+footer {
+    height: 70px;
+}
