@@ -67,7 +67,9 @@
 const rangeSelect = document.getElementById('range-select');
 const confirmButton = document.getElementById('confirm-button');
 const gridElement = document.querySelector('section .grid');
+const labelPoints = document.getElementById('points-label');
 const gamePoints = document.getElementById('game-points');
+const result = document.getElementById('result');
 
 //? ---------------------------------------------------------------------------------- \\ 
 //? FUNZIONI 
@@ -82,14 +84,14 @@ const makeCell = (content) => {
     cell.classList.add('cell');
 
     // Aggiungo il numero di righe e colonne in base alla selezione dell'utente
-    if (rangeSelect.value == 0) {
+    if (rangeSelect.value === 0) {
         return;
     }
-    else if (rangeSelect.value == 10) {
+    else if (parseInt(rangeSelect.value) === 10) {
         cell.classList.add('big');
-    } else if (rangeSelect.value == 9) {
+    } else if (parseInt(rangeSelect.value) === 9) {
         cell.classList.add('medium');
-    } else if (rangeSelect.value == 7) {
+    } else if (parseInt(rangeSelect.value) === 2) {
         cell.classList.add('small');
     }
 
@@ -115,6 +117,17 @@ const makeBombs = (allBombs, maxCells) => {
     return arrayBombs;
 }
 
+// Funzione per stablire la fine del gioco
+const endGame = (pointSum, hasWon = false) => {
+    isGameOver = true;
+    const message = hasWon
+        ? 'Hai vinto!'
+        : `Hai perso, il tuo punteggio è ${pointSum}. Riprova!`;
+    labelPoints.classList.add('d-none');
+    gamePoints.classList.add('d-none');
+    result.innerHTML = message;
+}
+
 //? ---------------------------------------------------------------------------------- \\ 
 //? VARIABILI
 //? ---------------------------------------------------------------------------------- \\ 
@@ -125,10 +138,13 @@ let cols;
 let totalCells;
 
 // Numero massimo di bombe
-let allBombs = 16;
+let allBombs = 1;
 
-// Punteggio massimo = celle totali - bombe totali
-const maxPoints = totalCells - allBombs;
+// Variabile per stabilire la fine della partita
+let isGameOver = false;
+
+// Variabile per stabilire il numero di celle restanti
+let maxPoints;
 
 //todo ------------------------------------------------------------------------------- \\
 //todo EVENTI DINAMICI
@@ -136,6 +152,12 @@ const maxPoints = totalCells - allBombs;
 
 // L'utente clicca sul bottone che genererà una griglia di gioco quadrata.
 confirmButton.addEventListener('click', function () {
+
+    labelPoints.classList.remove('d-none');
+    gamePoints.classList.remove('d-none');
+    result.innerHTML = '';
+
+    isGameOver = false;
 
     //! Blocco il comportamento di default
     rangeSelect.addEventListener('submit', function (e) {
@@ -168,6 +190,10 @@ confirmButton.addEventListener('click', function () {
         // poi coloriamo la cella d'azzurro!
         cell.addEventListener('click', function () {
 
+            if (isGameOver) {
+                return;
+            }
+
             // Switch colore
             cell.classList.add('clicked');
 
@@ -182,17 +208,25 @@ confirmButton.addEventListener('click', function () {
             // Controllo se ho cliccato una bomba
             const isExploded = bombs.includes(parseInt(cell.innerText));
 
+            // Se ho cliccato una bomba
             if (isExploded) {
                 cell.classList.add('red');
-                console.log('Hai perso, il tuo punteggio è:', pointSum);
+                endGame(pointSum, false);
             }
+            // Se non ho cliccato una bomba
             else {
                 // Conto i punti, li sommo e stampo in pagina il risultato 
                 gamePoints.innerText = ++pointSum;
-                console.log('Somma: ', pointSum);
+                console.log('somma', pointSum);
+                // Controllo se il punteggio ottenuto è pari al punteggio massimo
+                if (pointSum === maxPoints)
+                    endGame(pointSum, true);
             }
         })
     }
+    // Punteggio massimo = celle totali - bombe totali
+    let maxPoints = totalCells - allBombs;
+    console.log(maxPoints);
 
     // Creo le bombe
     const bombs = makeBombs(allBombs, totalCells);
